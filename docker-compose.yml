@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: password123
+      MYSQL_DATABASE: tlapp
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  tlapp:
+    build: ./Containers/TLApp
+    container_name: tlapp
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password123
+      MYSQL_DATABASE: tlapp
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+
+  uservice:
+    build: ./Containers/uservice
+    container_name: uservice
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password123
+      MYSQL_DATABASE: tlapp
+    ports:
+      - "3001:3000"
+    depends_on:
+      - mysql
+
+volumes:
+  mysql-data:

@@ -1,0 +1,47 @@
+#v1-uservice.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: uservice-service
+spec:
+  selector:
+    app: uservice
+  ports:
+  - protocol: TCP
+    port: 4000
+    targetPort: 4000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uservice
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: uservice
+  template:
+    metadata:
+      labels:
+        app: uservice
+    spec:
+      containers:
+      - name: uservice
+        image: waven7/uservice:latest
+        # image: uservice:latest #use this and the row under for local testing
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 4000
+        env:
+        - name: MYSQL_HOST
+          value: mysql-service 
+        - name: MYSQL_USER
+          value: root 
+        - name: MYSQL_PASSWORD
+          value: password123 
+        - name: MYSQL_DB
+          value: tlapp
+
+
+

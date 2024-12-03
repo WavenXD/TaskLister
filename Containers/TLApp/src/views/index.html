@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskLister - Add, Update, and Delete Tasks</title>
+</head>
+<body>
+  <h1>TaskLister - Manage Tasks</h1>
+  
+  <!-- Add Task Form -->
+  <h2>Add a New Task</h2>
+  <form id="add-task-form">
+    <label for="add-title">Title:</label>
+    <input type="text" id="add-title" name="title" required><br><br>
+
+    <label for="add-description">Description:</label>
+    <textarea id="add-description" name="description"></textarea><br><br>
+
+    <label for="add-completed">Completed:</label>
+    <input type="checkbox" id="add-completed" name="completed"><br><br>
+
+    <label for="add-user-id">User ID:</label>
+    <input type="number" id="add-user-id" name="user_id" required><br><br>
+
+    <button type="submit">Add Task</button>
+  </form>
+  <div id="add-response"></div>
+
+  <!-- Update Task Form -->
+  <h2>Update an Existing Task</h2>
+  <form id="update-task-form">
+    <label for="update-id">Task ID:</label>
+    <input type="number" id="update-id" name="id" required><br><br>
+
+    <label for="update-title">Title:</label>
+    <input type="text" id="update-title" name="title" required><br><br>
+
+    <label for="update-description">Description:</label>
+    <textarea id="update-description" name="description"></textarea><br><br>
+
+    <label for="update-completed">Completed:</label>
+    <input type="checkbox" id="update-completed" name="completed"><br><br>
+
+    <label for="update-user-id">User ID:</label>
+    <input type="number" id="update-user-id" name="user_id"><br><br>
+
+    <button type="submit">Update Task</button>
+  </form>
+  <div id="update-response"></div>
+
+  <!-- Delete Task Form -->
+  <h2>Delete a Task</h2>
+  <form id="delete-task-form">
+    <label for="delete-id">Task ID:</label>
+    <input type="number" id="delete-id" name="id" required><br><br>
+
+    <button type="submit">Delete Task</button>
+  </form>
+  <div id="delete-response"></div>
+
+  <script>
+    // Handle Add Task
+    document.getElementById('add-task-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const title = document.getElementById('add-title').value;
+      const description = document.getElementById('add-description').value;
+      const completed = document.getElementById('add-completed').checked;
+      const user_id = document.getElementById('add-user-id').value;
+
+      const taskData = { title, description, completed, user_id };
+      console.log('Task Data Sent:', taskData);
+
+      try {
+        const response = await fetch('http://localhost:3000/tasks', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(taskData),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          document.getElementById('add-response').innerText = `Task added successfully: ${result.title}`;
+        } else {
+          const errorData = await response.json();
+          document.getElementById('add-response').innerText = `Error: ${errorData.error}`;
+        }
+      } catch (error) {
+        document.getElementById('add-response').innerText = `Request failed1: ${error.message}`;
+      }
+    });
+
+    // Handle Update Task
+    document.getElementById('update-task-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const id = document.getElementById('update-id').value;
+      const title = document.getElementById('update-title').value;
+      const description = document.getElementById('update-description').value;
+      const completed = document.getElementById('update-completed').checked;
+      const user_id = document.getElementById('update-user-id').value;
+
+      const taskData = { title, description, completed, user_id };
+
+      try {
+        const response = await fetch(`http://localhost:3000/tasks/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(taskData),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          document.getElementById('update-response').innerText = `Task updated successfully: ${result.title}`;
+        } else {
+          const errorData = await response.json();
+          document.getElementById('update-response').innerText = `Error: ${errorData.error}`;
+        }
+      } catch (error) {
+        document.getElementById('update-response').innerText = `Request failed2: ${error.message}`;
+      }
+    });
+
+    // Handle Delete Task
+    document.getElementById('delete-task-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const id = document.getElementById('delete-id').value;
+
+      try {
+        const response = await fetch(`http://localhost:3000/tasks/${id}`, {
+          method: 'DELETE',
+        });
+
+        if (response.ok) {
+          document.getElementById('delete-response').innerText = `Task deleted successfully.`;
+        } else {
+          const errorData = await response.json();
+          document.getElementById('delete-response').innerText = `Error: ${errorData.error}`;
+        }
+      } catch (error) {
+        document.getElementById('delete-response').innerText = `Request failed3: ${error.message}`;
+      }
+    });
+  </script>
+</body>
+</html>

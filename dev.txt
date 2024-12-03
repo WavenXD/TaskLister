@@ -1,0 +1,38 @@
+These commands are useful for a developer in this project.
+
+kubectl get pods
+kubectl logs <mysql-pod-name>
+
+#create pods whilst in TaskLister directory
+
+
+#port-forward microservices
+kubectl port-forward service/tlapp-service 3000:3000
+kubectl port-forward service/uservice-service 4000:4000
+
+#connect to mysql
+kubectl exec -it mysql-9df5c67b-9l2vh -- bash
+mysql -u root -p
+
+cd Containers/TLApp
+docker build -t tlapp:latest .
+cd ..
+cd ..
+cd Containers/uservice
+docker build -t uservice:latest .
+
+docker tag tlapp:latest waven7/tlapp:latest
+docker tag uservice:latest waven7/uservice:latest
+
+docker push waven7/tlapp:latest
+docker push waven7/uservice:latest
+cd ..
+cd ..
+
+
+kubectl get pods -l app=tlapp
+kubectl logs -f tlapp-6fb554c968-68l54
+kubectl logs -f tlapp-6fb554c968-l88sp
+
+kubectl get pods -l app=uservice
+kubectl logs -f uservice-6c884d5cdb-ds8nn
