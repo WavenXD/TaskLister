@@ -25,9 +25,9 @@ kubectl port-forward service/uservice-service 4000:4000
 ```
 > Now proceed from step 2.
 3. You can now see this user at [users](http://localhost:4000/users). Take notice of user_id as you will need it in the next step.
-4. The user_id is incremented and so i know that you saw the user_id as '1' if you added a user. Now go to [tlapp](http://localhost:3000).
-5. Try adding a task with a invalid user_id. 
-6. Now try adding a task with a valid user_id (presumably user_id 1 if you added a user).
+4. The user_id is incremented and therefore you must have seen that the user_id was '1' if you added your first user and have yet to delete one. Now go to [tlapp](http://localhost:3000).
+5. First try adding a task with an invalid user_id. 
+6. Now try adding a task with a valid user_id (presumably 'user_id': 1 if you added a user).
 7. Go to [tasks](http://localhost:3000/Tasks) to see your added task.
 
 -----------------------------------------------------------------------------
