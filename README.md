@@ -17,10 +17,13 @@ kubectl apply -f Kubernetes/v1-TLApp.yaml
 kubectl apply -f Kubernetes/v1-uservice.yaml
 ```
 2. Now try to access [uservice](http://localhost:4000) and add a user.
-- If you were unable to access the application through step you should run the following commands:
+> [!IMPORTANT]
+> If you are unable to access the application by step 2 you will have to run the following commands:.
+```
 kubectl port-forward service/tlapp-service 3000:3000
 kubectl port-forward service/uservice-service 4000:4000
-- Now go back to step 2.
+```
+> Now proceed from step 2.
 3. You can now see this user at [users](http://localhost:4000/users). Take notice of user_id as you will need it in the next step.
 4. The user_id is incremented and so i know that you saw the user_id as '1' if you added a user. Now go to [tlapp](http://localhost:3000).
 5. Try adding a task with a invalid user_id. 
